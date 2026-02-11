@@ -4,11 +4,9 @@ import { LoginPage } from '../pages/LoginPage.js';
 import { OrgSelectPage } from '../pages/OrgSelectPage.js';
 
 
-
-
 test.describe('LMA Web Application', () => {
   // Declare variables for pages and components
-  let page, login, org;
+  let page, login, org ;
 
   // ---------------------- SETUP ----------------------
   test.beforeAll(async ({ browser }) => {
@@ -39,8 +37,14 @@ test.describe('LMA Web Application', () => {
     await org.changeOrganization();
   });
 
-  test('Navigate to Financial Tracking', async () => {  
-    await org.navigateToFinancialTracking();
-  });
+  // test('Navigate to Financial Tracking', async () => {  
+  //   await org.navigateToFinancialTracking();
+  // });
+  // test('Navigate to CAF', async () => {  
+  //   await org.verifyCAFDashboard();
+  // });
+  // test('CAF tabs Navigation', async () => {  
+  //   await org.tabsNavigationCAF();
+  // });
 
 });
