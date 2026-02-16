@@ -15,7 +15,7 @@ export default defineConfig({
   // workers: process.env.CI ? 1 : undefined,
   workers: 1,
   reporter: [["html"], ["list"]],
-
+  timeout: 12 * 100000, // 12 seconds per test
   use: {
     baseURL: process.env.BASE_URL || "https://admin.lma.cardwarecloud.com",
     headless: true,
@@ -26,27 +26,45 @@ export default defineConfig({
 
   projects: [
     // 1) Auth setup
-    {
-      name: "setup-auth",
-      testMatch: /.*auth\.setup\.js/,
-    },
+    // {
+    //   name: "setup-auth",
+    //   testMatch: /.*auth\.setup\.js/,
+    // },
 
     // 2) Org setup depends on auth setup
-    {
-      name: "setup-org",
-      testMatch: /.*org\.setup\.js/,
-      dependencies: ["setup-auth"],
-      use: {
-        storageState: "playwright/.auth/auth.json",
-      },
-    },
-    // 3) Actual tests depend on org setup
+    // {
+    //   name: "setup-org",
+    //   testMatch: /.*org\.setup\.js/,
+    //   dependencies: ["setup-auth"],
+    //   use: {
+    //     storageState: "playwright/.auth/auth.json",
+    //   },
+    // },
+    // 3) CAF setup depends on org setup
+    // {
+    //   name: "setup-caf",
+    //   testMatch: /.*caf\.setup\.js/,
+    //   dependencies: ["setup-org"],
+    //   use: {
+    //     storageState: "playwright/.auth/org.json",
+    //   },
+    // },
+    // 4) Actual tests depend on org setup
+    // {
+    //   name: "chromium",
+    //   dependencies: ["setup-org"],
+    //   use: {
+    //     ...devices["Desktop Chrome"],
+    //     storageState: "playwright/.auth/org.json",
+    //   },
+    // },
+    // 5) Actual tests depend on caf setup
     {
       name: "chromium",
-      dependencies: ["setup-org"],
+      // dependencies: ["setup-auth"],
       use: {
         ...devices["Desktop Chrome"],
-        storageState: "playwright/.auth/org.json",
+        storageState: "playwright/.auth/caf.json",
       },
     },
   ],
