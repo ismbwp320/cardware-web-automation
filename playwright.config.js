@@ -15,38 +15,65 @@ export default defineConfig({
   // workers: process.env.CI ? 1 : undefined,
   workers: 1,
   reporter: [["html"], ["list"]],
-
+  timeout: 20 * 100000, // 20 mins
   use: {
     baseURL: process.env.BASE_URL || "https://admin.lma.cardwarecloud.com",
     headless: true,
     screenshot: "only-on-failure",
-    video: "retain-on-failure",
+    // video: "retain-on-failure",
     trace: "on-first-retry",
+    video: {
+      mode: 'on', // can also be 'retain-on-failure' or 'off'
+      size: { width: 1280, height: 720 },
+    },
+    contextOptions: {
+      recordVideo: {
+        dir: 'test-results/videos',
+      },
+    },
   },
 
   projects: [
     // 1) Auth setup
-    {
-      name: "setup-auth",
-      testMatch: /.*auth\.setup\.js/,
-    },
+    // {
+    //   name: "setup-auth",
+    //   testMatch: /.*auth\.setup\.js/,
+    // },
 
     // 2) Org setup depends on auth setup
-    {
-      name: "setup-org",
-      testMatch: /.*org\.setup\.js/,
-      dependencies: ["setup-auth"],
-      use: {
-        storageState: "playwright/.auth/auth.json",
-      },
-    },
-    // 3) Actual tests depend on org setup
+    // {
+    //   name: "setup-org",
+    //   testMatch: /.*org\.setup\.js/,
+    //   dependencies: ["setup-auth"],
+    //   use: {
+    //     storageState: "playwright/.auth/auth.json",
+    //   },
+    // },
+    // 3) CAF setup depends on org setup
+    // {
+    //   name: "setup-caf",
+    //   testMatch: /.*caf\.setup\.js/,
+    //   dependencies: ["setup-org"],
+    //   use: {
+    //     storageState: "playwright/.auth/org.json",
+    //   },
+    // },
+    // 4) Actual tests depend on org setup
+    // {
+    //   name: "chromium",
+    //   dependencies: ["setup-org"],
+    //   use: {
+    //     ...devices["Desktop Chrome"],
+    //     storageState: "playwright/.auth/org.json",
+    //   },
+    // },
+    // 5) Actual tests depend on caf setup
     {
       name: "chromium",
-      dependencies: ["setup-org"],
+      // dependencies: ["setup-auth"],
       use: {
         ...devices["Desktop Chrome"],
-        storageState: "playwright/.auth/org.json",
+        // storageState: "playwright/.auth/caf.json",
       },
     },
   ],

@@ -8,6 +8,7 @@ export class LoginPage {
     // Locators (update these if your UI has better labels)
     this.usernameInput = page.getByRole("textbox").first();
     this.passwordInput = page.getByRole("textbox").nth(1);
+    // this.signInButton = page.getByRole("button", { name: "Login" });
     this.signInButton = page.getByRole("button", { name: "Sign In" });
   }
 
@@ -29,3 +30,4 @@ export class LoginPage {
     await expect(this.page).not.toHaveURL(/login/i);
   }
 }
+

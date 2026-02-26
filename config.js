@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+
+
 // config.js
 export const CatalystConfig = {
   BASE_URL: process.env.BASE_URL || "https://admin.lma.cardwarecloud.com",
@@ -10,8 +12,9 @@ export const CatalystConfig = {
     EMAIL: process.env.USER_EMAIL || "justin+lma@catalystxl.com",
     PASSWORD: process.env.USER_PASSWORD || "Vacation2025!!",
   },
-  AUTH_FILE: "playwright/.auth/user.json",
-  ORG_FILE: "playwright/.auth/org.json" // Relative to project root
+  AUTH_FILE: "playwright/.auth/auth.json",
+  ORG_FILE: "playwright/.auth/org.json", // Relative to project root
+  CAF_FILE: "playwright/.auth/caf.json" // Relative to project root
 };
 
 export const ORG_NAME = process.env.ORG_NAME || "Developer Testing";
