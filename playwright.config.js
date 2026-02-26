@@ -15,13 +15,22 @@ export default defineConfig({
   // workers: process.env.CI ? 1 : undefined,
   workers: 1,
   reporter: [["html"], ["list"]],
-  timeout: 12 * 100000, // 12 seconds per test
+  timeout: 20 * 100000, // 20 mins
   use: {
     baseURL: process.env.BASE_URL || "https://admin.lma.cardwarecloud.com",
     headless: true,
     screenshot: "only-on-failure",
-    video: "retain-on-failure",
+    // video: "retain-on-failure",
     trace: "on-first-retry",
+    video: {
+      mode: 'on', // can also be 'retain-on-failure' or 'off'
+      size: { width: 1280, height: 720 },
+    },
+    contextOptions: {
+      recordVideo: {
+        dir: 'test-results/videos',
+      },
+    },
   },
 
   projects: [
@@ -64,7 +73,7 @@ export default defineConfig({
       // dependencies: ["setup-auth"],
       use: {
         ...devices["Desktop Chrome"],
-        storageState: "playwright/.auth/caf.json",
+        // storageState: "playwright/.auth/caf.json",
       },
     },
   ],

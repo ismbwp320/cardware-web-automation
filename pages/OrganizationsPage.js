@@ -1,39 +1,48 @@
+import { expect } from "@playwright/test";
 import path from "path";
-
+import { clickOnceVisible } from "../utils/common";
 const cafFile = path.join(process.cwd(), "playwright/.auth/caf.json");
 
 export class OrganizationsPage {
   constructor(page) {
     this.page = page;
   }
-
+  get sidebar() {
+    return this.page.getByTestId("sidebar_container").last();
+  }
   async navigationToOrganizations() {
-    await this.page.waitForTimeout(3000);
-    await this.page
-      .locator("div")
-      .filter({ hasText: /^Organizations$/ })
-      .nth(1)
-      .click();
+    const orgNav = this.sidebar.getByTestId("nav_item_organizations");
+    // await orgNav.waitFor({ state: "visible", timeout: 3000 });
+    // await orgNav.click();
+    await clickOnceVisible(orgNav, 1000);
+    
+    await this.page.waitForLoadState("networkidle");
+    await expect(this.page.getByTestId("page_header_organizations")).toBeVisible({ timeout: 5000 });
   }
 
   async searchOrganization(orgName) {
+    const searchBox = this.page.getByTestId("search_input").first();
+    await expect(searchBox).toBeVisible({ timeout: 3000 });
+    await searchBox.click();
+    await searchBox.fill(orgName);
     await this.page.waitForTimeout(1000);
-    await this.page.getByRole("textbox", { name: "Search" }).click();
-    await this.page.getByRole("textbox", { name: "Search" }).fill(orgName);
-    await this.page.waitForTimeout(1000);
-    await this.page.getByRole("textbox", { name: "Search" }).press("Enter");
-    await this.page.waitForTimeout(1000);
-    await this.page.getByRole("textbox", { name: "Search" }).click();
-    await this.page.getByRole("textbox", { name: "Search" }).fill("");
-    await this.page.waitForTimeout(1000);
-    await this.page.getByRole("textbox", { name: "Search" }).press("Enter");
+    await searchBox.press("Enter");
+    await searchBox.click();
+    await searchBox.fill("");
+    await searchBox.press("Enter");
     await this.page.waitForTimeout(1000);
   }
 
   async addOrganization(orgName) {
-    await this.page.getByRole("button", { name: " Add" }).click();
+    const addOrganizationButton = this.page.getByTestId(
+      "add_organization_button",
+    );
+    await expect(addOrganizationButton).toBeVisible({ timeout: 3000 });
+    await addOrganizationButton.click();
     await this.page.waitForTimeout(1000);
-    await this.page.getByRole("button", { name: "Close" }).click();
+    const modalCloseButton = this.page.getByRole("button", { name: "Close" });
+    await expect(modalCloseButton).toBeVisible({ timeout: 3000 });
+    await modalCloseButton.click();
     await this.page.waitForTimeout(1000);
   }
 }

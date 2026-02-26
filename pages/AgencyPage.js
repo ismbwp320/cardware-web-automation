@@ -7,10 +7,17 @@ export class AgencyPage {
     this.page = page;
   }
 
+  get sidebar() {
+    return this.page.getByTestId("sidebar_container").last();
+  }
   async navigateToAgency() {
-    await this.page.waitForTimeout(3000);
-    // await this.page.getByText('Agencies').nth(4).click();
-    await this.page.locator("div").getByText("Agencies").nth(6).click();
+    // await this.page.waitForTimeout(3000);
+    // // await this.page.getByText('Agencies').nth(4).click();
+    // await this.page.locator("div").getByText("Agencies").nth(6).click();
+
+    const orgNav = this.sidebar.getByTestId("nav_item_agency_list");
+    await orgNav.waitFor({ state: "visible", timeout: 3000 });
+    await orgNav.click();
   }
 
   async searchAgency(categoryName) {

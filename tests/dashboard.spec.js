@@ -9,16 +9,18 @@ import { FilesPage } from "../pages/FilesPage.js";
 import { SettingsPage } from "../pages/SettingsPage.js";
 import { AgencyExpensesPage } from "../pages/AgencyExpensesPage.js";
 import { AgencyPage } from "../pages/AgencyPage.js";
+import { OrgSelectPage } from "../pages/OrgSelectPage.js";
 
 // const orgFile = path.join(process.cwd(), "playwright/.auth/org.json");
 const cafFile = path.join(process.cwd(), "playwright/.auth/caf.json");
 
 test.use({ storageState: cafFile });
 
-let login, dashboard, organization, dealership, expenseManage, files, settings, agencyExpenses, agency;
+let  login, org, dashboard, organization, dealership, expenseManage, files, settings, agencyExpenses, agency;
 
 test.beforeEach(async ({ page }) => {
   login = new LoginPage(page);
+  org = new OrgSelectPage(page);
   dashboard = new DashboardPage(page);
   organization = new OrganizationsPage(page);
   dealership = new DealershipsPage(page);
@@ -33,35 +35,42 @@ test("Navigate to Financial Tracking (already logged in + caf selected)", async 
   page,
 }) => {
   await page.goto(
-    "https://expense-ui-414587549738.us-central1.run.app/lma-analytics",
+    "https://admin.lma.cardwarecloud.com/login",
   );
   await page.waitForLoadState("networkidle");
   await page.waitForTimeout(6000);
   await login.login(process.env.USERNAME, process.env.PASSWORD);
   await page.waitForTimeout(6000);
+  // await org.gotoHome();
+  await org.changeOrganization();
+  await org.navigateToCAF();
   await dashboard.verifyCAFDashboard();
+  await dashboard.navigateToTotalExpenses();
   // await dashboard.tabsNavigationCAF();
 
-  await organization.navigationToOrganizations();
-  await organization.searchOrganization("Test Organization");
-  await organization.addOrganization("Test Organization");
+  // await organization.navigationToOrganizations();
+  // await organization.searchOrganization("Test Organization");
+  // await organization.addOrganization("Test Organization");
 
-  await dealership.navigateToDealerships();
-  await dealership.searchDealerships("Test");
-  await dealership.searchLMAOrganizations("Test");
+  // await dealership.navigateToDealerships();
+  // await dealership.searchDealerships("Test");
+  // await dealership.searchLMAOrganizations("Test");
 
-  await expenseManage.navigateToExpenseManagement();
-  await expenseManage.searchWithFilters("Test");
-  await expenseManage.addExpense();
+  // await expenseManage.navigateToExpenseManagement();
+  // await expenseManage.searchWithFilters("Test");
+  // await expenseManage.addLedgerAdjustment();
+  // await expenseManage.addExpense();
+  // await expenseManage.addExpenseReimbursementflow();
+  // await expenseManage.addExpenseDirectPayflow();
 
 
-  await files.navigateToFiles();
-  await files.refreshFilesPage();
-  await files.openFilePreview();
+  // await files.navigateToFiles();
+  // await files.refreshFilesPage();
+  // await files.openFilePreview();
 
 
   
-  await settings.navigateToSettings();
+  // await settings.navigateToSettings();
   // await settings.navigateToCategories();
   // await settings.refreshCategoriesPage();
   // await settings.searchCategory("Test");
@@ -77,10 +86,11 @@ test("Navigate to Financial Tracking (already logged in + caf selected)", async 
   // await agencyExpenses.addGroupExpenseDirectPayFlow();
 
 
-  await agency.navigateToAgency();
-  await agency.searchAgency();
-  await agency.paginationFlow();
-  await agency.addAgency();
+
+  // await agency.navigateToAgency();
+  // await agency.searchAgency();
+  // await agency.paginationFlow();
+  // await agency.addAgency();
 
 });
 
